@@ -20,6 +20,7 @@ public class Database
 	{
 		database = new File(fileName);
 	}
+	
 	public String getResponse(String[] keywords)
 	{
 		lastResponse = currentResponse;

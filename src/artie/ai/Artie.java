@@ -8,6 +8,7 @@ import artie.database.Database;
 public class Artie
 {
 	private String userInput; // Provided by user
+	private String lastUserInput;
 	private String myName; // Loaded from settings file initially
 	private String userName; // Provided by user
 	private String response;
@@ -18,11 +19,13 @@ public class Artie
 	private double trainingImpact; // Loaded from settings file
 	private Database statementDatabase;
 	private Database questionDatabase;
+
 	public Artie()
 	{
 		statementDatabase = new Database("statements.xml");
 		questionDatabase = new Database("questions.xml");
 		userInput = "";
+		lastUserInput = "";
 		myName = "Artie";
 		userName = "Human";
 		response = "";
@@ -32,27 +35,31 @@ public class Artie
 		sentenceType = SentenceType.UNDECIDED;
 		trainingImpact = 0.1;
 	}
-	
+
 	public String getResponse(String input)
 	{
 		userInput = input;
-		
-		sentenceType = analyzeUserResponse();
-		
-		if (sentenceType == SentenceType.QUESTION)
+		if (userInput.toUpperCase().equals(lastUserInput.toUpperCase()))
 		{
-			response = handleInput(questionDatabase,sentenceType);
-		}
-		else if (sentenceType == SentenceType.STATEMENT)
+			response = handleRepeatedInput();
+		} else
 		{
-			response = handleInput(statementDatabase,sentenceType);
+			sentenceType = analyzeUserResponse();
+
+			if (sentenceType == SentenceType.QUESTION)
+			{
+				response = handleInput(questionDatabase, sentenceType);
+			} else if (sentenceType == SentenceType.STATEMENT)
+			{
+				response = handleInput(statementDatabase, sentenceType);
+			} else
+			{
+				response = handleUndecided();
+			}
+
 		}
-		else
-		{
-			response = handleUndecided();
-		}
-		
 		lastResponse = response;
+		lastUserInput = userInput;
 		return response;
 	}
 
@@ -68,7 +75,7 @@ public class Artie
 
 	private SentenceType analyzeUserResponse()
 	{
-		if (userInput.length()<1)
+		if (userInput.length() < 1)
 			return SentenceType.UNDECIDED;
 		// Test punctuation
 		if (userInput.contains("?"))
@@ -110,29 +117,32 @@ public class Artie
 	{
 		String[] keywords = tokenizeSentence();
 		String possibleResponse = database.getResponse(keywords);
-		
+
 		if (possibleResponse.equals(lastResponse))
 		{
-			if (database.getSecondBestResponseWeight()>0.60)
+			if (database.getSecondBestResponseWeight() > 0.60)
 				possibleResponse = database.getSecondBestResponseMessage();
 			else
 				possibleResponse = learnStatement();
-		}
-		else if (database.getResponseWeight()<0.60)
+		} else if (database.getResponseWeight() < 0.60)
 		{
 			if (sentenceType == SentenceType.STATEMENT)
 				possibleResponse = learnStatement();
 			if (sentenceType == SentenceType.QUESTION)
 				possibleResponse = learnQuestion();
 		}
-		
+
 		return possibleResponse;
 	}
-
 
 	private String handleUndecided()
 	{
 		return "Undecided!";
+	}
+
+	private String handleRepeatedInput()
+	{
+		return "Stop repeating yourself.";
 	}
 	private void train(double amount)
 	{
