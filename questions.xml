@@ -25,5 +25,18 @@
 <Message>Yes I like cheese!</Message>
 </Messages>
 </Response>
+<Response>
+<Keywords>
+<Keyword weight="0.1611331344210757">WILL</Keyword>
+<Keyword weight="0.3080113295747615">YOU</Keyword>
+<Keyword weight="0.26651939699950433">GIVE</Keyword>
+<Keyword weight="0.26291251854696307">ME</Keyword>
+<Keyword weight="0.30902399218049154">A</Keyword>
+<Keyword weight="0.21141831167740582">COOKIE</Keyword>
+</Keywords>
+<Messages>
+<Message>Yes, I will.</Message>
+</Messages>
+</Response>
 </Responses>
 
