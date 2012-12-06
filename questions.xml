@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Responses>
-    <Response>
-        <Keywords>
-            <Keyword weight="0.5">LIKE</Keyword>
-            <Keyword weight="0.5">PIE</Keyword>
-        </Keywords>
-        <Messages>
-            <Message>Yah I like pie!</Message>
-            <Message>Why of course I like pie!</Message>
-        </Messages>
-    </Response>
-    <Response>
-        <Keywords>
-            <Keyword weight="0.5">LIKE</Keyword>
-            <Keyword weight="0.5">CAKE</Keyword>
-        </Keywords>
-        <Messages>
-            <Message>Yes, but only white cake.</Message>
-            <Message>I love cake!</Message>
-        </Messages>
-    </Response>
+
 <Response>
 <Keywords>
-<Keyword weight="0.5228864086751733">DO</Keyword>
-<Keyword weight="0.5611067491622176">YOU</Keyword>
-<Keyword weight="0.5299639968072585">LIKE</Keyword>
-<Keyword weight="0.438389675965817">CHEESE</Keyword>
+<Keyword weight="0.25540093216614856">HOW</Keyword>
+<Keyword weight="0.30415169316001756">MANY</Keyword>
+<Keyword weight="0.21254503085749238">FINGERS</Keyword>
+<Keyword weight="0.27680925255001443">DO</Keyword>
+<Keyword weight="0.23327835575697892">YOU</Keyword>
+<Keyword weight="0.1759721449768595">HAVE</Keyword>
 </Keywords>
 <Messages>
-<Message>I love cheese!</Message>
+<Message>I have 10 fingers. </Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.2515756189301004">DO</Keyword>
+<Keyword weight="0.25766001178348147">YOU</Keyword>
+<Keyword weight="0.3040866925445398">LIKE</Keyword>
+<Keyword weight="0.24242682849688438">CHEESE</Keyword>
+</Keywords>
+<Messages>
+<Message>Yes I like cheese!</Message>
 </Messages>
 </Response>
 </Responses>

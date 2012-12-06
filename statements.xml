@@ -1,43 +1,75 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Responses>
-    <Response>
-        <Keywords>
-            <Keyword weight="0.5">LIKE</Keyword>
-            <Keyword weight="0.6">PIE</Keyword>
-        </Keywords>
-        <Messages>
-            <Message>Do you now?</Message>
-            <Message>I like pie too!</Message>
-        </Messages>
-    </Response>
-    <Response>
-        <Keywords>
-            <Keyword weight="0.5">LIKE</Keyword>
-            <Keyword weight="0.5">CAKE</Keyword>
-        </Keywords>
-        <Messages>
-            <Message>Cake is a lie.</Message>
-            <Message>I like cake too!</Message>
-        </Messages>
-    </Response>
 <Response>
 <Keywords>
-<Keyword weight="0.5387938918413755">I</Keyword>
-<Keyword weight="0.47906916171935254">LIKE</Keyword>
-<Keyword weight="0.5306594485329662">CHEESE</Keyword>
+<Keyword weight="0.730605371937932">HELLO</Keyword>
 </Keywords>
 <Messages>
-<Message>Yes.</Message>
+<Message>Hi!</Message>
 </Messages>
 </Response>
 <Response>
 <Keywords>
-<Keyword weight="0.501330306680487">I</Keyword>
-<Keyword weight="0.488611601480546">HATE</Keyword>
-<Keyword weight="0.542280173488386">CHEESE</Keyword>
+<Keyword weight="1.0392014407205497">HI</Keyword>
 </Keywords>
 <Messages>
-<Message>How can you hate cheese?</Message>
+<Message>Hello.</Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.6590826937012091">GOODBYE</Keyword>
+</Keywords>
+<Messages>
+<Message>See ya.</Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.6392736944269023">BYE</Keyword>
+</Keywords>
+<Messages>
+<Message>Goodbye.</Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.2352829801199523">I</Keyword>
+<Keyword weight="0.3317700780517753">LIKE</Keyword>
+<Keyword weight="0.55158550879068486">TALL</Keyword>
+<Keyword weight="0.2433854901018205">HATS</Keyword>
+</Keywords>
+<Messages>
+<Message>Tall hats are silly looking. </Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.3828327745220174">I</Keyword>
+<Keyword weight="0.31221177103329534">LIKE</Keyword>
+<Keyword weight="0.2686301321009899">HATS</Keyword>
+</Keywords>
+<Messages>
+<Message>Hats are very stylish.</Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.26732046924750097">I</Keyword>
+<Keyword weight="0.4177438668556138">DON'T</Keyword>
+<Keyword weight="0.4314254711205434">UNDERSTAND</Keyword>
+</Keywords>
+<Messages>
+<Message>I'll try to be more clear next time. [-]</Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.45248743871572805">NO</Keyword>
+<Keyword weight="0.36847442038775025">PROBLEM</Keyword>
+</Keywords>
+<Messages>
+<Message>Now what should we talk about?</Message>
 </Messages>
 </Response>
 </Responses>

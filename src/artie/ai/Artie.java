@@ -141,7 +141,7 @@ public class Artie
 
 			if (possibleResponse.equals(lastResponse))
 			{
-				if (database.getSecondBestResponseWeight() > 0.60
+				if (database.getSecondBestResponseWeight() >= 0.60
 						&& database.getSecondBestResponseMessage() != null)
 					possibleResponse = database.getSecondBestResponseMessage();
 				else
@@ -160,12 +160,12 @@ public class Artie
 		if (possibleResponse.contains("[+]"))
 		{
 			train(trainingImpact);
-			possibleResponse.replaceAll("[+]", "");
+			possibleResponse = possibleResponse.replace("[+]","");
 		}
 		if (possibleResponse.contains("[-]"))
 		{
 			train(-trainingImpact);
-			possibleResponse.replaceAll("[-]", "");
+			possibleResponse = possibleResponse.replace("[-]","");
 		}
 		return possibleResponse;
 	}
@@ -245,7 +245,6 @@ public class Artie
 				Arrays.asList(tokenizeSentence()));
 		if (questionLearning == LearningStage.NOT_ENGAGED)
 		{
-			Logger.Log("Test");
 			questionLearning = LearningStage.ASK_ANSWER;
 			return "I don't have an answer for that, can you tell me?";
 		}

@@ -125,11 +125,10 @@ public class Database
 		return secondBestWeight;
 	}
 
-	// TODO create a new response from scratch
+
 	public void writeResponse(LinkedList<String> keywords, String message)
 			throws Exception
 	{
-
 		Node root = doc.getFirstChild();
 
 		Node responseNode = doc.createElement("Response");
@@ -141,7 +140,7 @@ public class Database
 			keywordNode.setTextContent(keyword);
 			Attr weight = doc.createAttribute("weight");
 			Random generator = new Random();
-			double weightValue = 0.4 + (0.6 - 0.4) * generator.nextDouble();
+			double weightValue = 1/((double)keywords.size()+1) + (0.2) * generator.nextDouble();
 			weight.setValue(Double.toString(weightValue));
 			keywordNode.getAttributes().setNamedItem(weight);
 			keywordsNode.appendChild(keywordNode);
@@ -186,7 +185,7 @@ public class Database
 
 	}
 
-	// TODO Add code to get the best and second best response from database.
+	
 	private void getResponseWithHeighestWeight(String[] keywords)
 	{
 
@@ -209,7 +208,7 @@ public class Database
 			{
 				Node responseNode = currentKeyword.getParentNode()
 						.getParentNode();
-				if (!responses.contains(responseNode))
+				//if (!responses.contains(responseNode))
 					responses.add(responseNode);
 			}
 		}
@@ -242,16 +241,19 @@ public class Database
 				}
 			}
 
-			if (current > best)
+			if (current >= best)
 			{
 				secondBestResponse = bestResponse;
 				secondBestWeight = best;
+				
 				best = current;
-				current = 0;
+				
+				
 				bestResponse = response;
-				responseWeight = best;
 				currentResponse = response;
+				responseWeight = best;
 			}
+			current = 0;
 
 		}
 	}
