@@ -24,12 +24,12 @@ public class Artie
 	private String userName; // Provided by user
 	private String response;
 	private String lastResponse;
-	private LearningStage questionLearning;
-	private LearningStage statementLearning;
+	private LearningStage learningStage;
 	private SentenceType sentenceType;
 	private double trainingImpact; // Loaded from settings file
 	private Database statementDatabase;
 	private Database questionDatabase;
+	private String learningType;
 	private String newMessage;
 
 	public Artie()
@@ -42,8 +42,8 @@ public class Artie
 		userName = "Human";
 		response = "";
 		lastResponse = "";
-		questionLearning = LearningStage.NOT_ENGAGED;
-		statementLearning = LearningStage.NOT_ENGAGED;
+		learningStage = LearningStage.NOT_ENGAGED;
+		learningType = "";
 		sentenceType = SentenceType.UNDECIDED;
 		trainingImpact = 0.1;
 	}
@@ -132,8 +132,9 @@ public class Artie
 	private String handleInput(Database database, SentenceType sentenceType)
 	{
 		String possibleResponse = "";
-		if (questionLearning == LearningStage.NOT_ENGAGED
-				&& statementLearning == LearningStage.NOT_ENGAGED)
+		//if (questionLearning == LearningStage.NOT_ENGAGED
+		//		&& statementLearning == LearningStage.NOT_ENGAGED)
+		if (learningStage == LearningStage.NOT_ENGAGED)
 		{
 			String[] keywords = tokenizeSentence();
 			possibleResponse = database.getResponse(keywords);
@@ -189,86 +190,45 @@ public class Artie
 
 	private String learn()
 	{
-		if (statementLearning != LearningStage.NOT_ENGAGED)
-			return learnStatement();
-		if (questionLearning != LearningStage.NOT_ENGAGED)
-			return learnQuestion();
+		if (learningStage != LearningStage.NOT_ENGAGED)
+		{
+			if (learningType.equals("Statement"))
+				return learnSomethingNew(statementDatabase, "Statements");
+			else
+				return learnSomethingNew(questionDatabase, "Questions");
+		}
 
 		if (sentenceType == SentenceType.STATEMENT)
-			return learnStatement();
+		{
+			learningType = "Statement";
+			return learnSomethingNew(statementDatabase, "Statements");
+		}
 		else
-			return learnQuestion();
+		{
+			learningType = "Question";
+			return learnSomethingNew(questionDatabase, "Questions");
+		}
 	}
 
-	private String learnStatement()
-	{
-		LinkedList<String> keywords = new LinkedList<String>(
-				Arrays.asList(tokenizeSentence()));
-		if (statementLearning == LearningStage.NOT_ENGAGED)
-		{
-			statementLearning = LearningStage.ASK_ANSWER;
-			return getStatementFromXML("Statements");
-		}
-
-		else if (statementLearning == LearningStage.ASK_ANSWER)
-		{
-			newMessage = userInput;
-			statementLearning = LearningStage.ASK_IF_TRUE;
-			return getStatementFromXML("Confirm");
-		}
-
-		else if (statementLearning == LearningStage.ASK_IF_TRUE)
-		{
-			try
-			{
-				Scanner scanner = new Scanner(new File("confirm.txt"));
-				boolean confirmed = false;
-				while (scanner.hasNext())
-				{
-					if (keywords.contains(scanner.nextLine()))
-					{
-						confirmed = true;
-					}
-				}
-				scanner.close();
-				if (confirmed == true)
-				{
-
-					statementDatabase.writeResponse(
-							statementDatabase.getLastKeywordsGiven(),
-							newMessage);
-				}
-
-				statementLearning = LearningStage.NOT_ENGAGED;
-				return getStatementFromXML("Thanks");
-			} catch (Exception e)
-			{
-				return getStatementFromXML("Fail");
-			}
-		}
-		return getStatementFromXML("Rejection");
-
-	}
-
-	private String learnQuestion()
+	private String learnSomethingNew(Database database, String questionType)
 	{
 		LinkedList<String> keywords = new LinkedList<String>(
 				Arrays.asList(tokenizeSentence()));
 		
-		if (questionLearning == LearningStage.NOT_ENGAGED)
+		if (learningStage == LearningStage.NOT_ENGAGED)
 		{
-			questionLearning = LearningStage.ASK_ANSWER;
-			return getStatementFromXML("Questions");
+			learningStage = LearningStage.ASK_ANSWER;
+			return getStatementFromXML(questionType);
 		}
 
-		else if (questionLearning == LearningStage.ASK_ANSWER)
+		else if (learningStage == LearningStage.ASK_ANSWER)
 		{
 			newMessage = userInput;
-			questionLearning = LearningStage.ASK_IF_TRUE;
+			learningStage = LearningStage.ASK_IF_TRUE;
 			return getStatementFromXML("Confirm");
 		}
 
-		else if (questionLearning == LearningStage.ASK_IF_TRUE)
+		else if (learningStage == LearningStage.ASK_IF_TRUE)
 		{
 			try
 			{
@@ -284,13 +244,13 @@ public class Artie
 				scanner.close();
 				if (confirmed == true)
 				{
-					questionDatabase
+					database
 							.writeResponse(
-									questionDatabase.getLastKeywordsGiven(),
+									database.getLastKeywordsGiven(),
 									newMessage);
 				}
 
-				questionLearning = LearningStage.NOT_ENGAGED;
+				learningStage = LearningStage.NOT_ENGAGED;
 				return getStatementFromXML("Thanks");
 			} catch (Exception e)
 			{
@@ -299,7 +259,7 @@ public class Artie
 		}
 		return getStatementFromXML("Rejection");
 	}
-
+	
 	private String getStatementFromXML(String baseElement)
 	{
 		String message = null;

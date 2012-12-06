@@ -57,6 +57,7 @@ public class Database
 	public String getResponse(String[] keywords)
 	{
 		lastResponse = currentResponse;
+		currentResponse = null;
 		lastKeywordsGiven = new LinkedList<String>(
 				Arrays.asList(keywords));
 		getResponseWithHeighestWeight(keywords);
@@ -84,6 +85,11 @@ public class Database
 			return null;
 	}
 
+	public Node getLastResponseNode()
+	{
+		return lastResponse;
+	}
+	
 	public String getSecondBestResponseMessage()
 	{
 		Logger.log("Get second best response.");
