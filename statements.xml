@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Responses>
+    <Response>
+        <Keywords>
+            <Keyword weight = "0.5">LIKE</Keyword>
+            <Keyword weight = "0.6">PIE</Keyword>
+        </Keywords>
+        <Messages>
+            <Message>Do you now?</Message>
+            <Message>I like pie too!</Message>
+        </Messages>
+    </Response>
+    <Response>
+        <Keywords>
+            <Keyword weight = "0.5">LIKE</Keyword>
+            <Keyword weight = "0.5">CAKE</Keyword>
+        </Keywords>
+        <Messages>
+            <Message>Cake is a lie.</Message>
+            <Message>I like cake too!</Message>
+        </Messages>
+    </Response>
+</Responses>

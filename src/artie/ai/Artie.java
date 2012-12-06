@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Scanner;
 
 import artie.database.Database;
+import artie.utilities.Logger;
 
 public class Artie
 {
@@ -42,17 +43,20 @@ public class Artie
 		if (userInput.toUpperCase().equals(lastUserInput.toUpperCase()))
 		{
 			response = handleRepeatedInput();
-		} else
+		}
+		else
 		{
 			sentenceType = analyzeUserResponse();
 
 			if (sentenceType == SentenceType.QUESTION)
 			{
 				response = handleInput(questionDatabase, sentenceType);
-			} else if (sentenceType == SentenceType.STATEMENT)
+			}
+			else if (sentenceType == SentenceType.STATEMENT)
 			{
 				response = handleInput(statementDatabase, sentenceType);
-			} else
+			}
+			else
 			{
 				response = handleUndecided();
 			}
@@ -98,7 +102,8 @@ public class Artie
 				}
 
 			}
-		} catch (Exception ex)
+		}
+		catch (Exception ex)
 		{
 			System.out.println(ex);
 			return SentenceType.UNDECIDED;
@@ -110,28 +115,53 @@ public class Artie
 	private String[] tokenizeSentence()
 	{
 		String tokens[] = userInput.split("([.,!?:;\"-]|\\s)+");
+		for (int i = 0; i < tokens.length; i++)
+		{
+			tokens[i] = tokens[i].toUpperCase();
+		}
 		return tokens;
 	}
 
 	private String handleInput(Database database, SentenceType sentenceType)
 	{
-		String[] keywords = tokenizeSentence();
-		String possibleResponse = database.getResponse(keywords);
+		String possibleResponse ="";
+		if (questionLearning == LearningStage.NOT_ENGAGED && statementLearning == LearningStage.NOT_ENGAGED)
+		{
+			String[] keywords = tokenizeSentence();
+			possibleResponse = database.getResponse(keywords);
 
-		if (possibleResponse.equals(lastResponse))
-		{
-			if (database.getSecondBestResponseWeight() > 0.60)
-				possibleResponse = database.getSecondBestResponseMessage();
-			else
-				possibleResponse = learnStatement();
-		} else if (database.getResponseWeight() < 0.60)
-		{
-			if (sentenceType == SentenceType.STATEMENT)
-				possibleResponse = learnStatement();
-			if (sentenceType == SentenceType.QUESTION)
-				possibleResponse = learnQuestion();
+			if (possibleResponse == null)
+			{
+				possibleResponse = learn();
+			}
+
+			if (possibleResponse.equals(lastResponse))
+			{
+				if (database.getSecondBestResponseWeight() > 0.60 && database.getSecondBestResponseMessage()!=null)
+					possibleResponse = database.getSecondBestResponseMessage();
+				else
+					possibleResponse = learnStatement();
+			}
+			else if (database.getResponseWeight() < 0.60)
+			{
+				possibleResponse = learn();
+			}
 		}
-
+		else
+		{
+			possibleResponse = learn();
+		}
+		
+		if (possibleResponse.contains("[+]"))
+		{
+			train(trainingImpact);
+			possibleResponse.replaceAll("[+]", "");
+		}
+		if (possibleResponse.contains("[-]"))
+		{
+			train(-trainingImpact);
+			possibleResponse.replaceAll("[-]", "");
+		}
 		return possibleResponse;
 	}
 
@@ -144,11 +174,20 @@ public class Artie
 	{
 		return "Stop repeating yourself.";
 	}
+
 	private void train(double amount)
 	{
-
+		Logger.Log("Training engaged.  Effect on keywords should be: "+amount);
 	}
 
+	private String learn()
+	{
+		if (sentenceType == SentenceType.STATEMENT)
+			return learnStatement();
+		else
+			return learnQuestion();
+	}
+	
 	private String learnStatement()
 	{
 		return "Learning Statement Engaged";
