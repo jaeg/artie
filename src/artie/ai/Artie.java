@@ -3,7 +3,15 @@ package artie.ai;
 import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Scanner;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import artie.database.Database;
 import artie.utilities.Logger;
@@ -46,20 +54,17 @@ public class Artie
 		if (userInput.toUpperCase().equals(lastUserInput.toUpperCase()))
 		{
 			response = handleRepeatedInput();
-		}
-		else
+		} else
 		{
 			sentenceType = analyzeUserResponse();
 
 			if (sentenceType == SentenceType.QUESTION)
 			{
 				response = handleInput(questionDatabase, sentenceType);
-			}
-			else if (sentenceType == SentenceType.STATEMENT)
+			} else if (sentenceType == SentenceType.STATEMENT)
 			{
 				response = handleInput(statementDatabase, sentenceType);
-			}
-			else
+			} else
 			{
 				response = handleUndecided();
 			}
@@ -105,8 +110,7 @@ public class Artie
 				}
 
 			}
-		}
-		catch (Exception ex)
+		} catch (Exception ex)
 		{
 			System.out.println(ex);
 			return SentenceType.UNDECIDED;
@@ -146,13 +150,11 @@ public class Artie
 					possibleResponse = database.getSecondBestResponseMessage();
 				else
 					return learn();
-			}
-			else if (database.getResponseWeight() < 0.60)
+			} else if (database.getResponseWeight() < 0.60)
 			{
 				return learn();
 			}
-		}
-		else
+		} else
 		{
 			return learn();
 		}
@@ -160,12 +162,12 @@ public class Artie
 		if (possibleResponse.contains("[+]"))
 		{
 			train(trainingImpact);
-			possibleResponse = possibleResponse.replace("[+]","");
+			possibleResponse = possibleResponse.replace("[+]", "");
 		}
 		if (possibleResponse.contains("[-]"))
 		{
 			train(-trainingImpact);
-			possibleResponse = possibleResponse.replace("[-]","");
+			possibleResponse = possibleResponse.replace("[-]", "");
 		}
 		return possibleResponse;
 	}
@@ -191,7 +193,7 @@ public class Artie
 			return learnStatement();
 		if (questionLearning != LearningStage.NOT_ENGAGED)
 			return learnQuestion();
-		
+
 		if (sentenceType == SentenceType.STATEMENT)
 			return learnStatement();
 		else
@@ -205,37 +207,46 @@ public class Artie
 		if (statementLearning == LearningStage.NOT_ENGAGED)
 		{
 			statementLearning = LearningStage.ASK_ANSWER;
-			return "I don't know much about that.  Can you tell me more?";
+			return getStatementFromXML("Statements");
 		}
 
 		else if (statementLearning == LearningStage.ASK_ANSWER)
 		{
 			newMessage = userInput;
 			statementLearning = LearningStage.ASK_IF_TRUE;
-			return "Is that true?";
+			return getStatementFromXML("Confirm");
 		}
 
 		else if (statementLearning == LearningStage.ASK_IF_TRUE)
 		{
-
-			if (keywords.contains("YES") || keywords.contains("YAH")
-					|| keywords.contains("YEP") || keywords.contains("SURE"))
+			try
 			{
-				try
+				Scanner scanner = new Scanner(new File("confirm.txt"));
+				boolean confirmed = false;
+				while (scanner.hasNext())
 				{
+					if (keywords.contains(scanner.nextLine()))
+					{
+						confirmed = true;
+					}
+				}
+				scanner.close();
+				if (confirmed == true)
+				{
+
 					statementDatabase.writeResponse(
 							statementDatabase.getLastKeywordsGiven(),
 							newMessage);
 				}
-				catch (Exception e)
-				{
-					return "I failed to remember that...";
-				}
+
 				statementLearning = LearningStage.NOT_ENGAGED;
-				return "That's for informing me!";
+				return getStatementFromXML("Thanks");
+			} catch (Exception e)
+			{
+				return getStatementFromXML("Fail");
 			}
 		}
-		return "Maybe some other time then";
+		return getStatementFromXML("Rejection");
 
 	}
 
@@ -243,40 +254,83 @@ public class Artie
 	{
 		LinkedList<String> keywords = new LinkedList<String>(
 				Arrays.asList(tokenizeSentence()));
+		
 		if (questionLearning == LearningStage.NOT_ENGAGED)
 		{
 			questionLearning = LearningStage.ASK_ANSWER;
-			return "I don't have an answer for that, can you tell me?";
+			return getStatementFromXML("Questions");
 		}
 
 		else if (questionLearning == LearningStage.ASK_ANSWER)
 		{
 			newMessage = userInput;
 			questionLearning = LearningStage.ASK_IF_TRUE;
-			return "Is that true?";
+			return getStatementFromXML("Confirm");
 		}
 
 		else if (questionLearning == LearningStage.ASK_IF_TRUE)
 		{
-
-			if (keywords.contains("YES") || keywords.contains("YAH")
-					|| keywords.contains("YEP") || keywords.contains("SURE"))
+			try
 			{
-				try
+				Scanner scanner = new Scanner(new File("confirm.txt"));
+				boolean confirmed = false;
+				while (scanner.hasNext())
 				{
-					questionDatabase.writeResponse(
-							questionDatabase.getLastKeywordsGiven(),
-							newMessage);
+					if (keywords.contains(scanner.nextLine()))
+					{
+						confirmed = true;
+					}
 				}
-				catch (Exception e)
+				scanner.close();
+				if (confirmed == true)
 				{
-					return "I failed to remember that...";
+					questionDatabase
+							.writeResponse(
+									questionDatabase.getLastKeywordsGiven(),
+									newMessage);
 				}
+
 				questionLearning = LearningStage.NOT_ENGAGED;
-				return "That's one for the books.";
+				return getStatementFromXML("Thanks");
+			} catch (Exception e)
+			{
+				return getStatementFromXML("Fail");
 			}
 		}
-		return "Maybe some other time then";
+		return getStatementFromXML("Rejection");
 	}
 
+	private String getStatementFromXML(String baseElement)
+	{
+		String message = null;
+		try
+		{
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+					.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(new File("learningResponses.xml"));
+			doc.getDocumentElement().normalize();
+
+			NodeList nodes = doc.getElementsByTagName(baseElement);
+			if (nodes.getLength() > 0)
+			{
+				Element element = (Element) nodes.item(0);
+				NodeList messageNodes = element.getElementsByTagName("Message");
+				Random random = new Random();
+				int randomNumber = random.nextInt(messageNodes.getLength());
+				message = messageNodes.item(randomNumber).getTextContent();
+			} else
+			{
+				Logger.log("Bad base element in 'getStatementFromXML()'");
+				message = null;
+			}
+		} catch (Exception ex)
+		{
+			Logger.log("Failed to access learningResponse.xml");
+			message = null;
+
+		}
+
+		return message;
+	}
 }

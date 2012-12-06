@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Settings>
+    <MyName>ARTIE</MyName>
+    <LastUserName>Human</LastUserName>
+    <TrainingImpact>.1</TrainingImpact>
+    <LearningThreshold>.60</LearningThreshold>
+    <QuestionDatabase>questions.xml</QuestionDatabase>
+    <StatementDatabase>statements.xml</StatementDatabase>
+    <LearningDatabase>learningResponses.xml</learningDatabase>
+    <QuestionStarters>questionStarters.txt</QuestionStarters>
+    <Confirmers>confirm.txt</Confirmers>
+</Settings>

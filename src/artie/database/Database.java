@@ -76,8 +76,8 @@ public class Database
 		{
 			NodeList messages = responseElement.getElementsByTagName("Message");
 			Random random = new Random();
-
-			String message = messages.item(0).getTextContent();
+			int randomNumber = random.nextInt(messages.getLength());
+			String message = messages.item(randomNumber).getTextContent();
 			return message;
 		}
 		else
@@ -92,8 +92,8 @@ public class Database
 		{
 			NodeList messages = responseElement.getElementsByTagName("Message");
 			Random random = new Random();
-
-			String message = messages.item(0).getTextContent();
+			int randomNumber = random.nextInt(messages.getLength());
+			String message = messages.item(randomNumber).getTextContent();
 			return message;
 		}
 		else

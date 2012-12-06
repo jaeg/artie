@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Messages>
+    <Inquire>
+        <Statements>
+            <Message>I don't know much about that.  Can you tell me more?</Message>
+            <Message>I'm not familiar with that subject, tell me more.</Message>
+        </Statements>
+	    <Questions>
+	        <Message>I don't know the answer, how about you tell me?</Message>
+	        <Message>How about you answer that for me?</Message>
+	    </Questions>
+	</Inquire>
+	<Confirm>
+	    <Message>Is that true?</Message>
+	</Confirm>
+	<Thanks>
+		<Message>Thanks for telling me!</Message>
+		<Message>That's one for the books!</Message>
+	</Thanks>
+	<Fail>
+	    <Message>I failed to remember that..</Message>
+	    <Message>Something went wrong when I tried remembering that.</Message>
+	</Fail>
+	<Rejection>
+	    <Message>Some other time then.</Message>
+	    <Message>Maybe I asked at a bad time..</Message>
+	</Rejection>
+
+</Messages>
