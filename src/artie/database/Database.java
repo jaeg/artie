@@ -50,7 +50,7 @@ public class Database
 		}
 		catch (Exception ex)
 		{
-			Logger.Log("Failed to build database.");
+			Logger.log("Failed to build database.");
 		}
 	}
 
@@ -86,7 +86,7 @@ public class Database
 
 	public String getSecondBestResponseMessage()
 	{
-		Logger.Log("Get second best response.");
+		Logger.log("Get second best response.");
 		Element responseElement = (Element) secondBestResponse;
 		if (responseElement != null)
 		{

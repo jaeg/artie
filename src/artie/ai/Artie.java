@@ -182,7 +182,7 @@ public class Artie
 
 	private void train(double amount)
 	{
-		Logger.Log("Training engaged.  Effect on keywords should be: " + amount);
+		Logger.log("Training engaged.  Effect on keywords should be: " + amount);
 	}
 
 	private String learn()
