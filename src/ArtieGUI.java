@@ -30,7 +30,8 @@ import javax.swing.filechooser.FileFilter;
 import artie.ai.Artie;
 import artie.utilities.Logger;
 
-public class ArtieGUI extends JPanel {
+public class ArtieGUI extends JPanel
+{
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,7 +43,8 @@ public class ArtieGUI extends JPanel {
 	private JButton showLog;
 	private Artie artie;
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		JFrame frame = new JFrame("ARTIE");
 		frame.getContentPane().add(new ArtieGUI());
 		frame.pack();
@@ -53,18 +55,23 @@ public class ArtieGUI extends JPanel {
 
 	}
 
-	public ArtieGUI() {
+	public ArtieGUI()
+	{
 
-		try {
+		try
+		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 		}
-		try {
+		try
+		{
 			BufferedImage logo = ImageIO.read(new File("ARTIEHEADER.gif"));
 			JLabel logoLabel = new JLabel(new ImageIcon(logo));
 			logoLabel.setAlignmentX(0.5f);
 			add(logoLabel);
-		} catch (Exception ex) {
+		} catch (Exception ex)
+		{
 			System.out.println(ex);
 		}
 		new Logger();
@@ -74,18 +81,23 @@ public class ArtieGUI extends JPanel {
 		artie = new Artie();
 
 		save = new JButton("Save Chat");
-		save.addActionListener(new ActionListener() {
+		save.addActionListener(new ActionListener()
+		{
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				saveChoice.addChoosableFileFilter(new FileFilter() {
+			public void actionPerformed(ActionEvent e)
+			{
+				saveChoice.addChoosableFileFilter(new FileFilter()
+				{
 					String description = "Text File (*.txt)";
 					String extension = "txt";
 
-					public String getDescription() {
+					public String getDescription()
+					{
 						return description;
 					}
 
-					public boolean accept(File f) {
+					public boolean accept(File f)
+					{
 						if (f == null)
 							return false;
 						if (f.isDirectory())
@@ -93,8 +105,10 @@ public class ArtieGUI extends JPanel {
 						return f.getName().toLowerCase().endsWith(extension);
 					}
 				});
-				if (saveChoice.showDialog(null, "Save") == JFileChooser.APPROVE_OPTION) {
-					try {
+				if (saveChoice.showDialog(null, "Save") == JFileChooser.APPROVE_OPTION)
+				{
+					try
+					{
 						FileWriter fstream = new FileWriter(saveChoice
 								.getSelectedFile());
 						BufferedWriter out = new BufferedWriter(fstream);
@@ -102,7 +116,8 @@ public class ArtieGUI extends JPanel {
 						out.close();
 						JOptionPane.showMessageDialog(null,
 								"Your chat log has been saved.");
-					} catch (Exception ex) {
+					} catch (Exception ex)
+					{
 						JOptionPane.showMessageDialog(null,
 								"Error saving file!");
 					}
@@ -112,10 +127,12 @@ public class ArtieGUI extends JPanel {
 		});
 		showLog = new JButton("Show Log");
 
-		showLog.addActionListener(new ActionListener() {
+		showLog.addActionListener(new ActionListener()
+		{
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e)
+			{
 				Logger.toggleLog();
 			}
 		});
@@ -143,8 +160,10 @@ public class ArtieGUI extends JPanel {
 		add(conversationWindow);
 
 		conversationWindow.getVerticalScrollBar().addAdjustmentListener(
-				new AdjustmentListener() {
-					public void adjustmentValueChanged(AdjustmentEvent e) {
+				new AdjustmentListener()
+				{
+					public void adjustmentValueChanged(AdjustmentEvent e)
+					{
 						logWindow.select(logWindow.getHeight() + 100000, 0);
 					}
 				});
@@ -152,14 +171,24 @@ public class ArtieGUI extends JPanel {
 		add(conversationPanel);
 
 		conversationWindow.getVerticalScrollBar().addAdjustmentListener(
-				new AdjustmentListener() {
-					public void adjustmentValueChanged(AdjustmentEvent e) {
+				new AdjustmentListener()
+				{
+					public void adjustmentValueChanged(AdjustmentEvent e)
+					{
 						logWindow.select(logWindow.getHeight() + 100000, 0);
 					}
 				});
 		conversationPanel.setPreferredSize(new Dimension(300, 300));
 
 		submit = new JButton("Submit");
+		submit.addActionListener(new ActionListener(){ 
+
+		@Override
+		public void actionPerformed(ActionEvent arg0)
+		{
+			submitAction();
+			
+		}});
 		entryField = new JTextField();
 
 		submissionPanel.add(submit);
@@ -171,23 +200,30 @@ public class ArtieGUI extends JPanel {
 		conversationPanel.setBackground(new Color(227, 25, 42));
 		submissionPanel.setBackground(new Color(227, 25, 42));
 
-		entryField.addKeyListener(new KeyAdapter() {
+		entryField.addKeyListener(new KeyAdapter()
+		{
 
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyPressed(KeyEvent e)
+			{
 				int key = e.getKeyCode();
-				if (key == KeyEvent.VK_ENTER) {
-					// submitAction();
+				if (key == KeyEvent.VK_ENTER)
+				{
+					submitAction();
 				}
 			}
 		});
 	}
-	/*
-	 * private void submitAction() { Logger.log("\n"); String userInput =
-	 * entryField.getText(); Logger.log("User sent: " + userInput + "\n");
-	 * 
-	 * artie.response(userInput); String lastResponse =
-	 * artie.response().toString(); artie.learn(userInput);
-	 * entryField.setText(""); }
-	 */
+
+	private void submitAction()
+	{
+		Logger.log("\n");
+		String userInput = entryField.getText();
+		
+		logWindow.append(artie.getUserName()+ ":  " + userInput + "\n");
+		logWindow.append(artie.getName()+": "+artie.getResponse(userInput)+"\n");
+		
+		entryField.setText("");
+	}
+
 }
