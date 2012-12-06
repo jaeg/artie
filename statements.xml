@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Responses>
     <Response>
         <Keywords>
-            <Keyword weight = "0.5">LIKE</Keyword>
-            <Keyword weight = "0.6">PIE</Keyword>
+            <Keyword weight="0.5">LIKE</Keyword>
+            <Keyword weight="0.6">PIE</Keyword>
         </Keywords>
         <Messages>
             <Message>Do you now?</Message>
@@ -12,12 +12,33 @@
     </Response>
     <Response>
         <Keywords>
-            <Keyword weight = "0.5">LIKE</Keyword>
-            <Keyword weight = "0.5">CAKE</Keyword>
+            <Keyword weight="0.5">LIKE</Keyword>
+            <Keyword weight="0.5">CAKE</Keyword>
         </Keywords>
         <Messages>
             <Message>Cake is a lie.</Message>
             <Message>I like cake too!</Message>
         </Messages>
     </Response>
+<Response>
+<Keywords>
+<Keyword weight="0.5387938918413755">I</Keyword>
+<Keyword weight="0.47906916171935254">LIKE</Keyword>
+<Keyword weight="0.5306594485329662">CHEESE</Keyword>
+</Keywords>
+<Messages>
+<Message>Yes.</Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.501330306680487">I</Keyword>
+<Keyword weight="0.488611601480546">HATE</Keyword>
+<Keyword weight="0.542280173488386">CHEESE</Keyword>
+</Keywords>
+<Messages>
+<Message>How can you hate cheese?</Message>
+</Messages>
+</Response>
 </Responses>
+
