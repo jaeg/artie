@@ -24,11 +24,12 @@ import org.w3c.dom.NodeList;
 
 import artie.utilities.Logger;
 
+
 public class Database
 {
 	private Document doc;
 	private File database;
-	//private Node lastResponse;
+	// private Node lastResponse;
 	private Node currentResponse;
 	private Node secondBestResponse; // If there is a repeat use this one
 										// instead.
@@ -56,10 +57,9 @@ public class Database
 
 	public String getResponse(String[] keywords)
 	{
-		//lastResponse = currentResponse;
+		// lastResponse = currentResponse;
 		currentResponse = null;
-		lastKeywordsGiven = new LinkedList<String>(
-				Arrays.asList(keywords));
+		lastKeywordsGiven = new LinkedList<String>(Arrays.asList(keywords));
 		getResponseWithHeighestWeight(keywords);
 		return getResponseMessage();
 	}
@@ -69,7 +69,6 @@ public class Database
 		return currentResponse;
 	}
 
-	
 	public String getResponseMessage()
 	{
 		Element responseElement = (Element) currentResponse;
@@ -85,7 +84,6 @@ public class Database
 			return null;
 	}
 
-	
 	public String getSecondBestResponseMessage()
 	{
 		Logger.log("Get second best response.");
@@ -116,7 +114,7 @@ public class Database
 	{
 		return lastKeywordsGiven;
 	}
-	
+
 	public double getResponseWeight()
 	{
 		return responseWeight;
@@ -126,7 +124,6 @@ public class Database
 	{
 		return secondBestWeight;
 	}
-
 
 	public void writeResponse(LinkedList<String> keywords, String message)
 			throws Exception
@@ -144,15 +141,15 @@ public class Database
 			keywordNode.setTextContent(keyword);
 			Attr weight = doc.createAttribute("weight");
 			Random generator = new Random();
-			double weightValue =0.4 +(0.6-0.4) * generator.nextDouble();
+			double weightValue = 0.4 + (0.6 - 0.4) * generator.nextDouble();
 			weight.setValue(Double.toString(weightValue));
 			keywordNode.getAttributes().setNamedItem(weight);
 			keywordsNode.appendChild(keywordNode);
-			
-			Logger.log(keyword+"-"+weight+",");
+
+			Logger.log(keyword + "-" + weight + ",");
 		}
 
-		Logger.log("\nMessage: "+message+"\n");
+		Logger.log("\nMessage: " + message + "\n");
 		Node messageNode = doc.createElement("Message");
 		messageNode.setTextContent(message);
 		messagesNode.appendChild(messageNode);
@@ -161,24 +158,27 @@ public class Database
 		responseNode.appendChild(messagesNode);
 
 		root.appendChild(responseNode);
-		
+
 		saveDom();
 	}
 
-	
-	public void applyResponseKeywordWeight(String keyword,Node response, double amountToChangeWeight) throws Exception
+	public void applyResponseKeywordWeight(String keyword, Node response,
+			double amountToChangeWeight) throws Exception
 	{
-		Element responseElement = (Element)response;
+		Element responseElement = (Element) response;
 		NodeList keywordNodes = responseElement.getElementsByTagName("Keyword");
-		
-		for (int i=0; i<keywordNodes.getLength();i++)
+
+		for (int i = 0; i < keywordNodes.getLength(); i++)
 		{
-			Node keywordNode =keywordNodes.item(i);
+			Node keywordNode = keywordNodes.item(i);
 			if (keywordNode.getTextContent().equals(keyword))
 			{
-				Logger.log("Adjusting the keyword: "+keyword+" by "+amountToChangeWeight+"\n");
-				Node weightNode = keywordNode.getAttributes().getNamedItem("weight");
-				Double weight = Double.parseDouble(weightNode.getNodeValue())+amountToChangeWeight;
+				Logger.log("Adjusting the keyword: " + keyword + " by "
+						+ amountToChangeWeight + "\n");
+				Node weightNode = keywordNode.getAttributes().getNamedItem(
+						"weight");
+				Double weight = Double.parseDouble(weightNode.getNodeValue())
+						+ amountToChangeWeight;
 				weightNode.setNodeValue(weight.toString());
 			}
 		}
@@ -209,7 +209,7 @@ public class Database
 		out.println(xmlString);
 		out.close();
 	}
-	
+
 	private void getResponseWithHeighestWeight(String[] keywords)
 	{
 		Logger.log("*********\nAsking for response from database...\n");
@@ -264,25 +264,25 @@ public class Database
 					double weight = Double.parseDouble(attributes.getNamedItem(
 							"weight").getNodeValue());
 					current += weight;
-					Logger.log(currentKeyword.getTextContent()+"-"+weight+"\n");
+					Logger.log(currentKeyword.getTextContent() + "-" + weight
+							+ "\n");
 				}
 			}
-			
+
 			if (current >= best)
 			{
 				Logger.log("Better response found.\n");
 				secondBestResponse = bestResponse;
 				secondBestWeight = best;
-				
+
 				best = current;
-				
-				
+
 				bestResponse = response;
 				currentResponse = response;
 				responseWeight = best;
 			}
-			
-			Logger.log("Weight Total = "+current+"\n");
+
+			Logger.log("Weight Total = " + current + "\n");
 			current = 0;
 		}
 	}
