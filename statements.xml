@@ -1,93 +1,52 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Responses>
+
 <Response>
 <Keywords>
-<Keyword weight="0.730605371937932">HELLO</Keyword>
+<Keyword weight="0.9871631966451415">HELLO</Keyword>
 </Keywords>
 <Messages>
-<Message>Hi!</Message>
+<Message>Hi, I'm ARTIE!</Message>
 </Messages>
 </Response>
 <Response>
 <Keywords>
-<Keyword weight="1.0392014407205497">HI</Keyword>
+<Keyword weight="0.5270655322297765">I</Keyword>
+<Keyword weight="0.40197239874231533">DON'T</Keyword>
+<Keyword weight="0.42661519084395205">UNDERSTAND</Keyword>
 </Keywords>
 <Messages>
-<Message>Hello.</Message>
+<Message>We all have room for improvement, even me. [-]</Message>
 </Messages>
 </Response>
 <Response>
 <Keywords>
-<Keyword weight="0.6590826937012091">GOODBYE</Keyword>
+<Keyword weight="0.536738923497436">GOOD</Keyword>
+<Keyword weight="0.427258963743768">JOB</Keyword>
 </Keywords>
 <Messages>
-<Message>See ya.</Message>
+<Message>Thanks! [+]</Message>
 </Messages>
 </Response>
 <Response>
 <Keywords>
-<Keyword weight="0.6392736944269023">BYE</Keyword>
+<Keyword weight="0.298317009058635">I</Keyword>
+<Keyword weight="0.39648021835691528">LIKE</Keyword>
+<Keyword weight="0.4716554492400549">HATS</Keyword>
 </Keywords>
 <Messages>
-<Message>Goodbye.</Message>
+<Message>Hat's are very stylish.</Message>
 </Messages>
 </Response>
 <Response>
 <Keywords>
-<Keyword weight="0.2352829801199523">I</Keyword>
-<Keyword weight="0.1317700780517753">LIKE</Keyword>
-<Keyword weight="0.55158550879068486">TALL</Keyword>
-<Keyword weight="0.2433854901018205">HATS</Keyword>
+<Keyword weight="0.05850763171206602">I</Keyword>
+<Keyword weight="0.07597385219123926">LIKE</Keyword>
+<Keyword weight="0.598480288632138">TALL</Keyword>
+<Keyword weight="0.3852958032268321">HATS</Keyword>
 </Keywords>
 <Messages>
-<Message>Tall hats are silly looking. </Message>
-</Messages>
-</Response>
-<Response>
-<Keywords>
-<Keyword weight="0.1828327745220174">I</Keyword>
-<Keyword weight="0.11221177103329534">LIKE</Keyword>
-<Keyword weight="0.2686301321009899">HATS</Keyword>
-</Keywords>
-<Messages>
-<Message>Hats are very stylish.</Message>
-</Messages>
-</Response>
-<Response>
-<Keywords>
-<Keyword weight="0.26732046924750097">I</Keyword>
-<Keyword weight="0.4177438668556138">DON'T</Keyword>
-<Keyword weight="0.4314254711205434">UNDERSTAND</Keyword>
-</Keywords>
-<Messages>
-<Message>I'll try to be more clear next time. [-]</Message>
-</Messages>
-</Response>
-<Response>
-<Keywords>
-<Keyword weight="0.45248743871572805">NO</Keyword>
-<Keyword weight="0.36847442038775025">PROBLEM</Keyword>
-</Keywords>
-<Messages>
-<Message>Now what should we talk about?</Message>
-</Messages>
-</Response>
-<Response>
-<Keywords>
-<Keyword weight="0.6608459694319552">MATTER</Keyword>
-</Keywords>
-<Messages>
-<Message>Matter is what gives us mass.</Message>
-</Messages>
-</Response>
-<Response>
-<Keywords>
-<Keyword weight="0.37691060936848875">I</Keyword>
-<Keyword weight="0.3737968252033531">LIKE</Keyword>
-<Keyword weight="0.3965172511554518">PIE</Keyword>
-</Keywords>
-<Messages>
-<Message>Pie is very yummy.</Message>
+<Message>Tall hats are silly looking.</Message>
 </Messages>
 </Response>
 </Responses>

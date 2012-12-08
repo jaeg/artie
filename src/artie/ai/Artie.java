@@ -11,6 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import artie.database.Database;
@@ -24,6 +25,7 @@ public class Artie
 	private String userName; // Provided by user
 	private String response;
 	private String lastResponse;
+	private Node lastResponseNode;
 	private LearningStage learningStage;
 	private SentenceType sentenceType;
 	private double trainingImpact; // Loaded from settings file
@@ -54,17 +56,20 @@ public class Artie
 		if (userInput.toUpperCase().equals(lastUserInput.toUpperCase()))
 		{
 			response = handleRepeatedInput();
-		} else
+		}
+		else
 		{
 			sentenceType = analyzeUserResponse();
 
 			if (sentenceType == SentenceType.QUESTION)
 			{
 				response = handleInput(questionDatabase, sentenceType);
-			} else if (sentenceType == SentenceType.STATEMENT)
+			}
+			else if (sentenceType == SentenceType.STATEMENT)
 			{
 				response = handleInput(statementDatabase, sentenceType);
-			} else
+			}
+			else
 			{
 				response = handleUndecided();
 			}
@@ -110,7 +115,8 @@ public class Artie
 				}
 
 			}
-		} catch (Exception ex)
+		}
+		catch (Exception ex)
 		{
 			System.out.println(ex);
 			return SentenceType.UNDECIDED;
@@ -119,9 +125,9 @@ public class Artie
 		return SentenceType.STATEMENT;
 	}
 
-	private String[] tokenizeSentence()
+	private String[] tokenizeSentence(String sentence)
 	{
-		String tokens[] = userInput.split("([.,!?:;\"-]|\\s)+");
+		String tokens[] = sentence.split("([.,!?:;\"-]|\\s)+");
 		for (int i = 0; i < tokens.length; i++)
 		{
 			tokens[i] = tokens[i].toUpperCase();
@@ -132,12 +138,12 @@ public class Artie
 	private String handleInput(Database database, SentenceType sentenceType)
 	{
 		String possibleResponse = "";
-		//if (questionLearning == LearningStage.NOT_ENGAGED
-		//		&& statementLearning == LearningStage.NOT_ENGAGED)
+		Node tempResponseNode;
 		if (learningStage == LearningStage.NOT_ENGAGED)
 		{
-			String[] keywords = tokenizeSentence();
+			String[] keywords = tokenizeSentence(userInput);
 			possibleResponse = database.getResponse(keywords);
+			tempResponseNode = database.getResponseNode();
 
 			if (possibleResponse == null)
 			{
@@ -148,28 +154,38 @@ public class Artie
 			{
 				if (database.getSecondBestResponseWeight() >= 0.60
 						&& database.getSecondBestResponseMessage() != null)
+				{
 					possibleResponse = database.getSecondBestResponseMessage();
+					tempResponseNode = database.getSecondBestResponseNode();
+				}
+
 				else
 					return learn();
-			} else if (database.getResponseWeight() < 0.60)
+			}
+			else if (database.getResponseWeight() < 0.60)
 			{
 				return learn();
 			}
-		} else
+		}
+		else
 		{
 			return learn();
 		}
 
-		if (possibleResponse.contains("[+]"))
+		if (lastResponseNode != null)
 		{
-			train(trainingImpact);
-			possibleResponse = possibleResponse.replace("[+]", "");
+			if (possibleResponse.contains("[+]"))
+			{
+				train(trainingImpact, database);
+				possibleResponse = possibleResponse.replace("[+]", "");
+			}
+			if (possibleResponse.contains("[-]"))
+			{
+				train(-trainingImpact, database);
+				possibleResponse = possibleResponse.replace("[-]", "");
+			}
 		}
-		if (possibleResponse.contains("[-]"))
-		{
-			train(-trainingImpact);
-			possibleResponse = possibleResponse.replace("[-]", "");
-		}
+		lastResponseNode = tempResponseNode;
 		return possibleResponse;
 	}
 
@@ -183,9 +199,19 @@ public class Artie
 		return "Stop repeating yourself.";
 	}
 
-	private void train(double amount)
+	private void train(double amount, Database database)
 	{
+		try{
 		Logger.log("Training engaged.  Effect on keywords should be: " + amount);
+		String keywords[] = tokenizeSentence(lastUserInput);
+		for (int i = 0; i < keywords.length; i++)
+			database.applyResponseKeywordWeight(keywords[i], lastResponseNode,
+					amount);
+		}
+		catch (Exception ex)
+		{
+			getStatementFromXML("Fail");
+		}
 	}
 
 	private String learn()
@@ -213,8 +239,8 @@ public class Artie
 	private String learnSomethingNew(Database database, String questionType)
 	{
 		LinkedList<String> keywords = new LinkedList<String>(
-				Arrays.asList(tokenizeSentence()));
-		
+				Arrays.asList(tokenizeSentence(userInput)));
+
 		if (learningStage == LearningStage.NOT_ENGAGED)
 		{
 			learningStage = LearningStage.ASK_ANSWER;
@@ -244,22 +270,21 @@ public class Artie
 				scanner.close();
 				if (confirmed == true)
 				{
-					database
-							.writeResponse(
-									database.getLastKeywordsGiven(),
-									newMessage);
+					database.writeResponse(database.getLastKeywordsGiven(),
+							newMessage);
 				}
 
 				learningStage = LearningStage.NOT_ENGAGED;
 				return getStatementFromXML("Thanks");
-			} catch (Exception e)
+			}
+			catch (Exception e)
 			{
 				return getStatementFromXML("Fail");
 			}
 		}
 		return getStatementFromXML("Rejection");
 	}
-	
+
 	private String getStatementFromXML(String baseElement)
 	{
 		String message = null;
@@ -279,12 +304,14 @@ public class Artie
 				Random random = new Random();
 				int randomNumber = random.nextInt(messageNodes.getLength());
 				message = messageNodes.item(randomNumber).getTextContent();
-			} else
+			}
+			else
 			{
 				Logger.log("Bad base element in 'getStatementFromXML()'");
 				message = null;
 			}
-		} catch (Exception ex)
+		}
+		catch (Exception ex)
 		{
 			Logger.log("Failed to access learningResponse.xml");
 			message = null;

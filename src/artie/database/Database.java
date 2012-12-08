@@ -28,7 +28,7 @@ public class Database
 {
 	private Document doc;
 	private File database;
-	private Node lastResponse;
+	//private Node lastResponse;
 	private Node currentResponse;
 	private Node secondBestResponse; // If there is a repeat use this one
 										// instead.
@@ -56,7 +56,7 @@ public class Database
 
 	public String getResponse(String[] keywords)
 	{
-		lastResponse = currentResponse;
+		//lastResponse = currentResponse;
 		currentResponse = null;
 		lastKeywordsGiven = new LinkedList<String>(
 				Arrays.asList(keywords));
@@ -85,10 +85,10 @@ public class Database
 			return null;
 	}
 
-	public Node getLastResponseNode()
+	/*public Node getLastResponseNode()
 	{
 		return lastResponse;
-	}
+	}*/
 	
 	public String getSecondBestResponseMessage()
 	{
@@ -106,7 +106,7 @@ public class Database
 			return null;
 	}
 
-	public Node getSecondBestResponse()
+	public Node getSecondBestResponseNode()
 	{
 		return secondBestResponse;
 	}
@@ -146,7 +146,7 @@ public class Database
 			keywordNode.setTextContent(keyword);
 			Attr weight = doc.createAttribute("weight");
 			Random generator = new Random();
-			double weightValue = 1/((double)keywords.size()+1) + (0.2) * generator.nextDouble();
+			double weightValue =0.4 +(0.6-0.4) * generator.nextDouble();
 			weight.setValue(Double.toString(weightValue));
 			keywordNode.getAttributes().setNamedItem(weight);
 			keywordsNode.appendChild(keywordNode);
@@ -160,7 +160,38 @@ public class Database
 		responseNode.appendChild(messagesNode);
 
 		root.appendChild(responseNode);
+		
+		saveDom();
+	}
 
+	
+	public void applyResponseKeywordWeight(String keyword,Node response, double amountToChangeWeight) throws Exception
+	{
+		Element responseElement = (Element)response;
+		NodeList keywordNodes = responseElement.getElementsByTagName("Keyword");
+		
+		for (int i=0; i<keywordNodes.getLength();i++)
+		{
+			Node keywordNode =keywordNodes.item(i);
+			if (keywordNode.getTextContent().equals(keyword))
+			{
+				Node weightNode = keywordNode.getAttributes().getNamedItem("weight");
+				Double weight = Double.parseDouble(weightNode.getNodeValue())+amountToChangeWeight;
+				weightNode.setNodeValue(weight.toString());
+			}
+		}
+		
+		saveDom();
+	}
+
+	// TODO Add code to add a message to a particular response
+	public void addResponseMessage(Node response, String message)
+	{
+
+	}
+
+	private void saveDom() throws Exception
+	{
 		Transformer transformer = TransformerFactory.newInstance()
 				.newTransformer();
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -176,21 +207,7 @@ public class Database
 		PrintWriter out = new PrintWriter(database);
 		out.println(xmlString);
 		out.close();
-
 	}
-
-	// TODO set a particular keyword's weight
-	public void setResponseKeywordWeight(Node keyword, double weight)
-	{
-
-	}
-
-	// TODO Add code to add a message to a particular response
-	public void addResponseMessage(Node response, String message)
-	{
-
-	}
-
 	
 	private void getResponseWithHeighestWeight(String[] keywords)
 	{
