@@ -14,6 +14,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import artie.LanguageProcessor.LanguageProcessor;
 import artie.database.Database;
 import artie.utilities.Logger;
 
@@ -42,6 +43,7 @@ public class Artie
 
 	private String learningType;
 	private String newMessage;
+	private String phraseToLearn;
 
 	public Artie()
 	{
@@ -277,6 +279,7 @@ public class Artie
 		{
 			Logger.log("Learning Step 1 - Ask for information\n");
 			learningStage = LearningStage.ASK_ANSWER;
+			phraseToLearn = userInput;
 			return getStatementFromXML(questionType);
 		}
 
@@ -306,12 +309,16 @@ public class Artie
 				if (confirmed == true)
 				{
 					Logger.log("   User input confirmed\n");
-					database.writeResponse(database.getLastKeywordsGiven(),
+					Logger.log("Original Question: "+phraseToLearn+"\n");
+					
+					database.writeResponse(phraseToLearn,
 							newMessage);
+					learningStage = LearningStage.NOT_ENGAGED;
+					return getStatementFromXML("Thanks");
 				}
-
 				learningStage = LearningStage.NOT_ENGAGED;
-				return getStatementFromXML("Thanks");
+				return getStatementFromXML("Rejection");
+
 			}
 			catch (Exception e)
 			{
@@ -420,4 +427,6 @@ public class Artie
 			}
 		}
 	}
+
+	
 }

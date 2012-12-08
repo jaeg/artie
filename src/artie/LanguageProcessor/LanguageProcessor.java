@@ -19,6 +19,10 @@ import opennlp.tools.util.Span;
 public class LanguageProcessor
 {
 
+	private static String lastSentence = "";
+	private static String[] lastSentencePOS;
+	
+	
 	private LanguageProcessor()
 	{
 
@@ -200,7 +204,7 @@ public class LanguageProcessor
 		{
 			e.printStackTrace();
 		}
-
+		
 		Tokenizer tokenizer = new TokenizerME(model);
 		String tokens[] = tokenizer.tokenize(sentence);
 
@@ -210,6 +214,12 @@ public class LanguageProcessor
 
 	public static String[] tagSentencePOS(String sentence)
 	{
+		
+		if (lastSentence.equals(sentence))
+		{
+			return lastSentencePOS;
+		}
+		
 		InputStream modelIn = null;
 		POSModel model = null;
 		try
@@ -227,8 +237,9 @@ public class LanguageProcessor
 		}
 
 		POSTaggerME tagger = new POSTaggerME(model);
-
+		lastSentence = sentence;
 		String tags[] = tagger.tag(tokenizeSentence(sentence));
+		lastSentencePOS = tags;
 		return tags;
 	}
 }

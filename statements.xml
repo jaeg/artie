@@ -1,52 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Responses>
-
 <Response>
 <Keywords>
-<Keyword weight="0.9871631966451415">HELLO</Keyword>
+<Keyword weight="0.3960174412910803">is</Keyword>
+<Keyword weight="0.3117607273765215">Sparta</Keyword>
 </Keywords>
 <Messages>
-<Message>Hi, I'm ARTIE!</Message>
-</Messages>
-</Response>
-<Response>
-<Keywords>
-<Keyword weight="0.5270655322297765">I</Keyword>
-<Keyword weight="0.40197239874231533">DON'T</Keyword>
-<Keyword weight="0.42661519084395205">UNDERSTAND</Keyword>
-</Keywords>
-<Messages>
-<Message>We all have room for improvement, even me. [-]</Message>
-</Messages>
-</Response>
-<Response>
-<Keywords>
-<Keyword weight="0.536738923497436">GOOD</Keyword>
-<Keyword weight="0.427258963743768">JOB</Keyword>
-</Keywords>
-<Messages>
-<Message>Thanks! [+]</Message>
-</Messages>
-</Response>
-<Response>
-<Keywords>
-<Keyword weight="0.298317009058635">I</Keyword>
-<Keyword weight="0.39648021835691528">LIKE</Keyword>
-<Keyword weight="0.4716554492400549">HATS</Keyword>
-</Keywords>
-<Messages>
-<Message>Hat's are very stylish.</Message>
-</Messages>
-</Response>
-<Response>
-<Keywords>
-<Keyword weight="0.05850763171206602">I</Keyword>
-<Keyword weight="0.07597385219123926">LIKE</Keyword>
-<Keyword weight="0.598480288632138">TALL</Keyword>
-<Keyword weight="0.3852958032268321">HATS</Keyword>
-</Keywords>
-<Messages>
-<Message>Tall hats are silly looking.</Message>
+<Message>*kick*</Message>
 </Messages>
 </Response>
 </Responses>

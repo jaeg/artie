@@ -1,16 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Responses>
-
-<Response>
-<Keywords>
-<Keyword weight="0.41807818275243736">DO</Keyword>
-<Keyword weight="0.49441468026097657">YOU</Keyword>
-<Keyword weight="0.4961083899228406">LIKE</Keyword>
-<Keyword weight="0.5467684060677879">PIE</Keyword>
-</Keywords>
-<Messages>
-<Message>Yes I like pie.</Message>
-</Messages>
-</Response>
 </Responses>
 

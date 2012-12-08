@@ -22,6 +22,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import artie.LanguageProcessor.LanguageProcessor;
 import artie.utilities.Logger;
 
 
@@ -125,7 +126,7 @@ public class Database
 		return secondBestWeight;
 	}
 
-	public void writeResponse(LinkedList<String> keywords, String message)
+	public void writeResponse(String phraseToLearn, String message)
 			throws Exception
 	{
 		Logger.log("Writing a new response...\n ");
@@ -135,20 +136,72 @@ public class Database
 		Node keywordsNode = doc.createElement("Keywords");
 		Node messagesNode = doc.createElement("Messages");
 		Logger.log("New keywords: ");
-		for (String keyword : keywords)
+		
+		//TODO condense into a single function
+		//Verbs
+		String verbKeywords[] = LanguageProcessor.getVerbs(phraseToLearn);
+		for (String keyword : verbKeywords)
 		{
 			Node keywordNode = doc.createElement("Keyword");
 			keywordNode.setTextContent(keyword);
 			Attr weight = doc.createAttribute("weight");
 			Random generator = new Random();
-			double weightValue = 0.4 + (0.6 - 0.4) * generator.nextDouble();
+			double weightValue = 0.2 + (.2) * generator.nextDouble();
 			weight.setValue(Double.toString(weightValue));
 			keywordNode.getAttributes().setNamedItem(weight);
 			keywordsNode.appendChild(keywordNode);
 
 			Logger.log(keyword + "-" + weight + ",");
 		}
+		
+		//Nouns
+		String nounKeywords[] = LanguageProcessor.getNouns(phraseToLearn);
+		for (String keyword : nounKeywords)
+		{
+			Node keywordNode = doc.createElement("Keyword");
+			keywordNode.setTextContent(keyword);
+			Attr weight = doc.createAttribute("weight");
+			Random generator = new Random();
+			double weightValue = 0.3 + (.2) * generator.nextDouble();
+			weight.setValue(Double.toString(weightValue));
+			keywordNode.getAttributes().setNamedItem(weight);
+			keywordsNode.appendChild(keywordNode);
 
+			Logger.log(keyword + "-" + weight + ",");
+		}
+		
+		//Adjectives
+		String adjectiveKeywords[] = LanguageProcessor.getAdjectives(phraseToLearn);
+		for (String keyword : adjectiveKeywords)
+		{
+			Node keywordNode = doc.createElement("Keyword");
+			keywordNode.setTextContent(keyword);
+			Attr weight = doc.createAttribute("weight");
+			Random generator = new Random();
+			double weightValue = 0.4 + (.2) * generator.nextDouble();
+			weight.setValue(Double.toString(weightValue));
+			keywordNode.getAttributes().setNamedItem(weight);
+			keywordsNode.appendChild(keywordNode);
+
+			Logger.log(keyword + "-" + weight + ",");
+		}
+		
+		//Adverbs
+		String adverbKeywords[] = LanguageProcessor.getAdverbs(phraseToLearn);
+		for (String keyword : adverbKeywords)
+		{
+			Node keywordNode = doc.createElement("Keyword");
+			keywordNode.setTextContent(keyword);
+			Attr weight = doc.createAttribute("weight");
+			Random generator = new Random();
+			double weightValue = 0.4 + (.2) * generator.nextDouble();
+			weight.setValue(Double.toString(weightValue));
+			keywordNode.getAttributes().setNamedItem(weight);
+			keywordsNode.appendChild(keywordNode);
+
+			Logger.log(keyword + "-" + weight + ",");
+		}
+		
 		Logger.log("\nMessage: " + message + "\n");
 		Node messageNode = doc.createElement("Message");
 		messageNode.setTextContent(message);
@@ -286,4 +339,12 @@ public class Database
 			current = 0;
 		}
 	}
+	
+	private String[] combineStringArrays(String[] A, String[] B) {
+		   String[] C= new String[A.length+B.length];
+		   System.arraycopy(A, 0, C, 0, A.length);
+		   System.arraycopy(B, 0, C, A.length, B.length);
+
+		   return C;
+		}
 }
