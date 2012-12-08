@@ -137,14 +137,33 @@ public class Database
 		Node messagesNode = doc.createElement("Messages");
 		Logger.log("New keywords: ");
 		
-		phraseToLearn = phraseToLearn.toUpperCase();
+		//phraseToLearn = phraseToLearn.toUpperCase();
 		//TODO condense into a single function
+		//Nouns
+		String nounKeywords[] = LanguageProcessor.getNouns(phraseToLearn);
+		outputArray(nounKeywords);
+		for (String keyword : nounKeywords)
+		{
+			System.out.println(keyword);
+			Node keywordNode = doc.createElement("Keyword");
+			keywordNode.setTextContent(keyword.toUpperCase());
+			Attr weight = doc.createAttribute("weight");
+			Random generator = new Random();
+			double weightValue = 0.3 + (.2) * generator.nextDouble();
+			weight.setValue(Double.toString(weightValue));
+			keywordNode.getAttributes().setNamedItem(weight);
+			keywordsNode.appendChild(keywordNode);
+
+			Logger.log(keyword + "-" + weight + ",");
+		}
 		//Verbs
 		String verbKeywords[] = LanguageProcessor.getVerbs(phraseToLearn);
+
 		for (String keyword : verbKeywords)
 		{
+			System.out.println(keyword);
 			Node keywordNode = doc.createElement("Keyword");
-			keywordNode.setTextContent(keyword);
+			keywordNode.setTextContent(keyword.toUpperCase());
 			Attr weight = doc.createAttribute("weight");
 			Random generator = new Random();
 			double weightValue = 0.2 + (.2) * generator.nextDouble();
@@ -155,28 +174,16 @@ public class Database
 			Logger.log(keyword + "-" + weight + ",");
 		}
 		
-		//Nouns
-		String nounKeywords[] = LanguageProcessor.getNouns(phraseToLearn);
-		for (String keyword : nounKeywords)
-		{
-			Node keywordNode = doc.createElement("Keyword");
-			keywordNode.setTextContent(keyword);
-			Attr weight = doc.createAttribute("weight");
-			Random generator = new Random();
-			double weightValue = 0.3 + (.2) * generator.nextDouble();
-			weight.setValue(Double.toString(weightValue));
-			keywordNode.getAttributes().setNamedItem(weight);
-			keywordsNode.appendChild(keywordNode);
 
-			Logger.log(keyword + "-" + weight + ",");
-		}
 		
 		//Adjectives
 		String adjectiveKeywords[] = LanguageProcessor.getAdjectives(phraseToLearn);
+
 		for (String keyword : adjectiveKeywords)
 		{
+			System.out.println(keyword);
 			Node keywordNode = doc.createElement("Keyword");
-			keywordNode.setTextContent(keyword);
+			keywordNode.setTextContent(keyword.toUpperCase());
 			Attr weight = doc.createAttribute("weight");
 			Random generator = new Random();
 			double weightValue = 0.4 + (.2) * generator.nextDouble();
@@ -189,10 +196,12 @@ public class Database
 		
 		//Adverbs
 		String adverbKeywords[] = LanguageProcessor.getAdverbs(phraseToLearn);
+		outputArray(adverbKeywords);
 		for (String keyword : adverbKeywords)
 		{
+			System.out.println(keyword);
 			Node keywordNode = doc.createElement("Keyword");
-			keywordNode.setTextContent(keyword);
+			keywordNode.setTextContent(keyword.toUpperCase());
 			Attr weight = doc.createAttribute("weight");
 			Random generator = new Random();
 			double weightValue = 0.4 + (.2) * generator.nextDouble();
@@ -341,4 +350,12 @@ public class Database
 		}
 	}
 	
+	
+	private static void outputArray(String[] array)
+	{
+		for (int i=0; i<array.length;i++)
+		{
+			System.out.println(array[i]);
+		}
+	}
 }

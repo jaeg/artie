@@ -35,7 +35,7 @@ public class LanguageProcessor
 		String tokens[] = tokenizeSentence(sentence);
 		String taggedTokens[] = tagSentencePOS(sentence);
 		String verbTags[] =
-		{ "VBN", "VBG", "VBD", "VB" };
+		{ "VBN", "VBG", "VBD", "VB","IN" };
 		for (int i = 0; i < taggedTokens.length; i++)
 		{
 			for (int j = 0; j < verbTags.length; j++)
@@ -217,7 +217,7 @@ public class LanguageProcessor
 		
 		if (lastSentence.equals(sentence))
 		{
-			return lastSentencePOS;
+			return lastSentencePOS.clone();
 		}
 		
 		InputStream modelIn = null;

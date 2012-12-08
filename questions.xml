@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Responses>
+<Response>
+<Keywords>
+<Keyword weight="0.20232609647664032">LIKES</Keyword>
+<Keyword weight="0.3619132817981485">ORANGE</Keyword>
+<Keyword weight="0.4501239339514751">SODA</Keyword>
+</Keywords>
+<Messages>
+<Message>I like orange soda!</Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.23064805498640722">DO</Keyword>
+<Keyword weight="0.32978153370678664">HAVE</Keyword>
+<Keyword weight="0.3480495383367898">ANY</Keyword>
+<Keyword weight="0.32694695546987135">FAMILY</Keyword>
+</Keywords>
+<Messages>
+<Message>I am a direct decendant of IDA4D2.</Message>
+</Messages>
+</Response>
 </Responses>
 

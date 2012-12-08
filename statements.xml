@@ -2,11 +2,29 @@
 <Responses>
 <Response>
 <Keywords>
-<Keyword weight="0.35629184078012216">IS</Keyword>
-<Keyword weight="0.31656688545338285">SPARTA</Keyword>
+<Keyword weight="0.3711085068030539">HATS</Keyword>
+<Keyword weight="0.3417277906786841">LIKE</Keyword>
 </Keywords>
 <Messages>
-<Message>*kick*</Message>
+<Message>Hat's are very stylish.</Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.52394763284919414">DON'T</Keyword>
+<Keyword weight="0.5455359435816752">UNDERSTAND</Keyword>
+</Keywords>
+<Messages>
+<Message>I'll try better next time.[-]</Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.4563078290603397">PIE</Keyword>
+<Keyword weight="0.2543048947394305">LIKE</Keyword>
+</Keywords>
+<Messages>
+<Message>Pie is yummy.</Message>
 </Messages>
 </Response>
 </Responses>
