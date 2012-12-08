@@ -21,33 +21,61 @@ public class Artie
 {
 	private String userInput; // Provided by user
 	private String lastUserInput;
+
 	private String myName; // Loaded from settings file initially
 	private String userName; // Provided by user
+
 	private String response;
 	private String lastResponse;
 	private Node lastResponseNode;
+
 	private LearningStage learningStage;
 	private SentenceType sentenceType;
-	private double trainingImpact; // Loaded from settings file
+	// Settings
+	private double trainingImpact;
+	private double learningThreshold;
+	private String questionDatabasePath, statementDatabasePath, confirmPath,
+			questionStartersPath, learningResponsesPath;
+
 	private Database statementDatabase;
 	private Database questionDatabase;
+
 	private String learningType;
 	private String newMessage;
 
 	public Artie()
 	{
-		statementDatabase = new Database("statements.xml");
-		questionDatabase = new Database("questions.xml");
+		Logger.log("ARTIE online....\n");
 		userInput = "";
 		lastUserInput = "";
 		myName = "Artie";
 		userName = "Human";
+		trainingImpact = 0.1;
+		learningThreshold = 0.6;
+		questionDatabasePath = "questions.xml";
+		statementDatabasePath = "statements.xml";
+		confirmPath = "confirm.txt";
+		questionStartersPath = "questionStarters.txt";
+		learningResponsesPath = "learningResponses";
+
+		try
+		{
+			loadSettingsXML();
+		}
+		catch (Exception ex)
+		{
+			Logger.log("No settings.xml file found.  Using default settings.");
+		}
+
 		response = "";
 		lastResponse = "";
 		learningStage = LearningStage.NOT_ENGAGED;
 		learningType = "";
 		sentenceType = SentenceType.UNDECIDED;
-		trainingImpact = 0.1;
+		statementDatabase = new Database(statementDatabasePath);
+		questionDatabase = new Database(questionDatabasePath);
+		
+		
 	}
 
 	public String getResponse(String input)
@@ -101,7 +129,7 @@ public class Artie
 		if (userInput.contains(".") || userInput.contains("!"))
 			return SentenceType.STATEMENT;
 
-		File questionStarters = new File("questionStarters.txt");
+		File questionStarters = new File(questionStartersPath);
 
 		try
 		{
@@ -152,7 +180,7 @@ public class Artie
 
 			if (possibleResponse.equals(lastResponse))
 			{
-				if (database.getSecondBestResponseWeight() >= 0.60
+				if (database.getSecondBestResponseWeight() >= learningThreshold
 						&& database.getSecondBestResponseMessage() != null)
 				{
 					possibleResponse = database.getSecondBestResponseMessage();
@@ -201,12 +229,16 @@ public class Artie
 
 	private void train(double amount, Database database)
 	{
-		try{
-		Logger.log("Training engaged.  Effect on keywords should be: " + amount);
-		String keywords[] = tokenizeSentence(lastUserInput);
-		for (int i = 0; i < keywords.length; i++)
-			database.applyResponseKeywordWeight(keywords[i], lastResponseNode,
-					amount);
+		try
+		{
+			Logger.log("Training engaged.  Effect on keywords should be: "
+					+ amount+"\n");
+			String keywords[] = tokenizeSentence(lastUserInput);
+			for (int i = 0; i < keywords.length; i++)
+				database.applyResponseKeywordWeight(keywords[i],
+						lastResponseNode, amount);
+			
+			Logger.log("------\n");
 		}
 		catch (Exception ex)
 		{
@@ -243,12 +275,14 @@ public class Artie
 
 		if (learningStage == LearningStage.NOT_ENGAGED)
 		{
+			Logger.log("Learning Step 1 - Ask for information\n");
 			learningStage = LearningStage.ASK_ANSWER;
 			return getStatementFromXML(questionType);
 		}
 
 		else if (learningStage == LearningStage.ASK_ANSWER)
 		{
+			Logger.log("Learning Step 2 - Ask if correct\n");
 			newMessage = userInput;
 			learningStage = LearningStage.ASK_IF_TRUE;
 			return getStatementFromXML("Confirm");
@@ -256,20 +290,22 @@ public class Artie
 
 		else if (learningStage == LearningStage.ASK_IF_TRUE)
 		{
+			Logger.log("Learning Step 3 - Proccess user confirmation\n");
 			try
 			{
-				Scanner scanner = new Scanner(new File("confirm.txt"));
+				Scanner scanner = new Scanner(new File(confirmPath));
 				boolean confirmed = false;
 				while (scanner.hasNext())
 				{
 					if (keywords.contains(scanner.nextLine()))
-					{
+					{						
 						confirmed = true;
 					}
 				}
 				scanner.close();
 				if (confirmed == true)
 				{
+					Logger.log("   User input confirmed\n");
 					database.writeResponse(database.getLastKeywordsGiven(),
 							newMessage);
 				}
@@ -279,9 +315,11 @@ public class Artie
 			}
 			catch (Exception e)
 			{
+				Logger.log("   Error with XML\n");
 				return getStatementFromXML("Fail");
 			}
 		}
+		Logger.log("   User input rejected\n");
 		return getStatementFromXML("Rejection");
 	}
 
@@ -293,7 +331,7 @@ public class Artie
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(new File("learningResponses.xml"));
+			Document doc = dBuilder.parse(new File(learningResponsesPath));
 			doc.getDocumentElement().normalize();
 
 			NodeList nodes = doc.getElementsByTagName(baseElement);
@@ -319,5 +357,67 @@ public class Artie
 		}
 
 		return message;
+	}
+
+	private void loadSettingsXML() throws Exception
+	{
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		Document doc = dBuilder.parse(new File("settings.xml"));
+		doc.getDocumentElement().normalize();
+
+		NodeList settings = doc.getFirstChild().getChildNodes();
+
+		for (int i = 0; i < settings.getLength(); i++)
+		{
+			Node setting = settings.item(i);
+			String settingName = setting.getNodeName();
+			String settingContent = setting.getTextContent();
+			if (settingName.equals("MyName"))
+			{
+				Logger.log(settingName +" = "+settingContent+"\n");
+				myName = settingContent;
+			}
+			else if (settingName.equals("LastUserName"))
+			{
+				Logger.log(settingName +" = "+settingContent+"\n");
+				userName = settingContent;
+			}
+			else if (settingName.equals("TrainingImpact"))
+			{
+				Logger.log(settingName +" = "+settingContent+"\n");
+				trainingImpact = Double.parseDouble(settingContent);
+			}
+			else if (settingName.equals("LearningThreshold"))
+			{
+				Logger.log(settingName +" = "+settingContent+"\n");
+				learningThreshold = Double.parseDouble(settingContent);
+			}
+			else if (settingName.equals("QuestionDatabase"))
+			{
+				Logger.log(settingName +" = "+settingContent+"\n");
+				questionDatabasePath = settingContent;
+			}
+			else if (settingName.equals("StatementDatabase"))
+			{
+				Logger.log(settingName +" = "+settingContent+"\n");
+				statementDatabasePath = settingContent;
+			}
+			else if (settingName.equals("LearningDatabase"))
+			{
+				Logger.log(settingName +" = "+settingContent+"\n");
+				learningResponsesPath = settingContent;
+			}
+			else if (settingName.equals("QuestionStarters"))
+			{
+				Logger.log(settingName +" = "+settingContent+"\n");
+				questionStartersPath = settingContent;
+			}
+			else if (settingName.equals("Confirmers"))
+			{
+				Logger.log(settingName +" = "+settingContent+"\n");
+				confirmPath = settingContent;
+			}
+		}
 	}
 }

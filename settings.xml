@@ -6,7 +6,7 @@
     <LearningThreshold>.60</LearningThreshold>
     <QuestionDatabase>questions.xml</QuestionDatabase>
     <StatementDatabase>statements.xml</StatementDatabase>
-    <LearningDatabase>learningResponses.xml</learningDatabase>
+    <LearningDatabase>learningResponses.xml</LearningDatabase>
     <QuestionStarters>questionStarters.txt</QuestionStarters>
     <Confirmers>confirm.txt</Confirmers>
 </Settings>

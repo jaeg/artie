@@ -69,7 +69,7 @@ public class Database
 		return currentResponse;
 	}
 
-	// TODO Get a random message from a response
+	
 	public String getResponseMessage()
 	{
 		Element responseElement = (Element) currentResponse;
@@ -85,10 +85,6 @@ public class Database
 			return null;
 	}
 
-	/*public Node getLastResponseNode()
-	{
-		return lastResponse;
-	}*/
 	
 	public String getSecondBestResponseMessage()
 	{
@@ -135,11 +131,13 @@ public class Database
 	public void writeResponse(LinkedList<String> keywords, String message)
 			throws Exception
 	{
+		Logger.log("Writing a new response...\n ");
 		Node root = doc.getFirstChild();
 
 		Node responseNode = doc.createElement("Response");
 		Node keywordsNode = doc.createElement("Keywords");
 		Node messagesNode = doc.createElement("Messages");
+		Logger.log("New keywords: ");
 		for (String keyword : keywords)
 		{
 			Node keywordNode = doc.createElement("Keyword");
@@ -150,8 +148,11 @@ public class Database
 			weight.setValue(Double.toString(weightValue));
 			keywordNode.getAttributes().setNamedItem(weight);
 			keywordsNode.appendChild(keywordNode);
+			
+			Logger.log(keyword+"-"+weight+",");
 		}
 
+		Logger.log("\nMessage: "+message+"\n");
 		Node messageNode = doc.createElement("Message");
 		messageNode.setTextContent(message);
 		messagesNode.appendChild(messageNode);
@@ -175,12 +176,12 @@ public class Database
 			Node keywordNode =keywordNodes.item(i);
 			if (keywordNode.getTextContent().equals(keyword))
 			{
+				Logger.log("Adjusting the keyword: "+keyword+" by "+amountToChangeWeight+"\n");
 				Node weightNode = keywordNode.getAttributes().getNamedItem("weight");
 				Double weight = Double.parseDouble(weightNode.getNodeValue())+amountToChangeWeight;
 				weightNode.setNodeValue(weight.toString());
 			}
 		}
-		
 		saveDom();
 	}
 
@@ -211,10 +212,11 @@ public class Database
 	
 	private void getResponseWithHeighestWeight(String[] keywords)
 	{
-
+		Logger.log("*********\nAsking for response from database...\n");
 		LinkedList<Node> responses = new LinkedList<Node>();
 		responses = getResponsesWithSimilarKeywords(keywords);
 		getBestResponseNode(responses, keywords);
+		Logger.log("--------\n");
 	}
 
 	private LinkedList<Node> getResponsesWithSimilarKeywords(String[] keywords)
@@ -231,7 +233,7 @@ public class Database
 			{
 				Node responseNode = currentKeyword.getParentNode()
 						.getParentNode();
-				//if (!responses.contains(responseNode))
+				if (!responses.contains(responseNode))
 					responses.add(responseNode);
 			}
 		}
@@ -249,6 +251,7 @@ public class Database
 				Arrays.asList(keywords));
 		for (Node response : responses)
 		{
+			Logger.log("--------\n");
 			Element responseElement = (Element) response;
 			NodeList responseKeywordNodes = responseElement
 					.getElementsByTagName("Keyword");
@@ -261,11 +264,13 @@ public class Database
 					double weight = Double.parseDouble(attributes.getNamedItem(
 							"weight").getNodeValue());
 					current += weight;
+					Logger.log(currentKeyword.getTextContent()+"-"+weight+"\n");
 				}
 			}
-
+			
 			if (current >= best)
 			{
+				Logger.log("Better response found.\n");
 				secondBestResponse = bestResponse;
 				secondBestWeight = best;
 				
@@ -276,8 +281,9 @@ public class Database
 				currentResponse = response;
 				responseWeight = best;
 			}
+			
+			Logger.log("Weight Total = "+current+"\n");
 			current = 0;
-
 		}
 	}
 }
