@@ -137,6 +137,7 @@ public class Database
 		Node messagesNode = doc.createElement("Messages");
 		Logger.log("New keywords: ");
 		
+		phraseToLearn = phraseToLearn.toUpperCase();
 		//TODO condense into a single function
 		//Verbs
 		String verbKeywords[] = LanguageProcessor.getVerbs(phraseToLearn);
@@ -340,11 +341,4 @@ public class Database
 		}
 	}
 	
-	private String[] combineStringArrays(String[] A, String[] B) {
-		   String[] C= new String[A.length+B.length];
-		   System.arraycopy(A, 0, C, 0, A.length);
-		   System.arraycopy(B, 0, C, A.length, B.length);
-
-		   return C;
-		}
 }
