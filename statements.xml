@@ -27,5 +27,40 @@
 <Message>Pie is yummy.</Message>
 </Messages>
 </Response>
+<Response>
+<Keywords>
+<Keyword weight="0.5326353505475045">HELLO</Keyword>
+</Keywords>
+<Messages>
+<Message>Hi, how are you?</Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.656690003602266">HELLO</Keyword>
+</Keywords>
+<Messages>
+<Message>Hi, how are you?</Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.3834505347897857">'M</Keyword>
+<Keyword weight="0.3941850766427705">DOING</Keyword>
+<Keyword weight="0.47887242466698826">WELL</Keyword>
+</Keywords>
+<Messages>
+<Message>Good to hear that!</Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.42346640007034503">COOKIE</Keyword>
+<Keyword weight="0.3744968137847087">GIVE</Keyword>
+</Keywords>
+<Messages>
+<Message>The only cookies I have are in your browser.</Message>
+</Messages>
+</Response>
 </Responses>
 

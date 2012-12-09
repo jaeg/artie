@@ -137,14 +137,15 @@ public class Database
 		Node messagesNode = doc.createElement("Messages");
 		Logger.log("New keywords: ");
 		
+		int numberOfKeywords = 0;
+		LinkedList<Node> nodesToAdd = new LinkedList<Node>();
 		//phraseToLearn = phraseToLearn.toUpperCase();
 		//TODO condense into a single function
 		//Nouns
 		String nounKeywords[] = LanguageProcessor.getNouns(phraseToLearn);
-		outputArray(nounKeywords);
+		numberOfKeywords += nounKeywords.length;
 		for (String keyword : nounKeywords)
 		{
-			System.out.println(keyword);
 			Node keywordNode = doc.createElement("Keyword");
 			keywordNode.setTextContent(keyword.toUpperCase());
 			Attr weight = doc.createAttribute("weight");
@@ -152,16 +153,15 @@ public class Database
 			double weightValue = 0.3 + (.2) * generator.nextDouble();
 			weight.setValue(Double.toString(weightValue));
 			keywordNode.getAttributes().setNamedItem(weight);
-			keywordsNode.appendChild(keywordNode);
+			nodesToAdd.add(keywordNode);
 
 			Logger.log(keyword + "-" + weight + ",");
 		}
 		//Verbs
 		String verbKeywords[] = LanguageProcessor.getVerbs(phraseToLearn);
-
+		numberOfKeywords += verbKeywords.length;
 		for (String keyword : verbKeywords)
 		{
-			System.out.println(keyword);
 			Node keywordNode = doc.createElement("Keyword");
 			keywordNode.setTextContent(keyword.toUpperCase());
 			Attr weight = doc.createAttribute("weight");
@@ -169,7 +169,7 @@ public class Database
 			double weightValue = 0.2 + (.2) * generator.nextDouble();
 			weight.setValue(Double.toString(weightValue));
 			keywordNode.getAttributes().setNamedItem(weight);
-			keywordsNode.appendChild(keywordNode);
+			nodesToAdd.add(keywordNode);
 
 			Logger.log(keyword + "-" + weight + ",");
 		}
@@ -178,10 +178,9 @@ public class Database
 		
 		//Adjectives
 		String adjectiveKeywords[] = LanguageProcessor.getAdjectives(phraseToLearn);
-
+		numberOfKeywords += adjectiveKeywords.length;
 		for (String keyword : adjectiveKeywords)
 		{
-			System.out.println(keyword);
 			Node keywordNode = doc.createElement("Keyword");
 			keywordNode.setTextContent(keyword.toUpperCase());
 			Attr weight = doc.createAttribute("weight");
@@ -189,17 +188,16 @@ public class Database
 			double weightValue = 0.4 + (.2) * generator.nextDouble();
 			weight.setValue(Double.toString(weightValue));
 			keywordNode.getAttributes().setNamedItem(weight);
-			keywordsNode.appendChild(keywordNode);
+			nodesToAdd.add(keywordNode);
 
 			Logger.log(keyword + "-" + weight + ",");
 		}
 		
 		//Adverbs
 		String adverbKeywords[] = LanguageProcessor.getAdverbs(phraseToLearn);
-		outputArray(adverbKeywords);
+		numberOfKeywords += adverbKeywords.length;
 		for (String keyword : adverbKeywords)
 		{
-			System.out.println(keyword);
 			Node keywordNode = doc.createElement("Keyword");
 			keywordNode.setTextContent(keyword.toUpperCase());
 			Attr weight = doc.createAttribute("weight");
@@ -207,9 +205,34 @@ public class Database
 			double weightValue = 0.4 + (.2) * generator.nextDouble();
 			weight.setValue(Double.toString(weightValue));
 			keywordNode.getAttributes().setNamedItem(weight);
-			keywordsNode.appendChild(keywordNode);
+			nodesToAdd.add(keywordNode);
 
 			Logger.log(keyword + "-" + weight + ",");
+		}
+		
+		if (numberOfKeywords < 2 )
+		{
+			String keywords[] = phraseToLearn.split("([.,!?:;\"-]|\\s)+");
+			for (String keyword : keywords)
+			{
+				Node keywordNode = doc.createElement("Keyword");
+				keywordNode.setTextContent(keyword.toUpperCase());
+				Attr weight = doc.createAttribute("weight");
+				Random generator = new Random();
+				double weightValue = 0.5 + (.2) * generator.nextDouble();
+				weight.setValue(Double.toString(weightValue));
+				keywordNode.getAttributes().setNamedItem(weight);
+				keywordsNode.appendChild(keywordNode);
+
+				Logger.log(keyword + "-" + weight + ",");
+			}
+		}
+		else
+		{
+			for (Node keywordNode: nodesToAdd)
+			{
+				keywordsNode.appendChild(keywordNode);
+			}
 		}
 		
 		Logger.log("\nMessage: " + message + "\n");

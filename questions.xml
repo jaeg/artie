@@ -21,5 +21,51 @@
 <Message>I am a direct decendant of IDA4D2.</Message>
 </Messages>
 </Response>
+<Response>
+<Keywords>
+<Keyword weight="0.26046428148801215">I'M</Keyword>
+<Keyword weight="0.5828558229558355">GOOD</Keyword>
+</Keywords>
+<Messages>
+<Message>I'm glad to hear that!</Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.41923166232593967">NAME</Keyword>
+<Keyword weight="0.2451662739608522">IS</Keyword>
+</Keywords>
+<Messages>
+<Message>My name is ARTIE.</Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.3573406767618196">ARE</Keyword>
+</Keywords>
+<Messages>
+<Message>I am an artifical talking entity. </Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.5588611943855798">WHAT</Keyword>
+<Keyword weight="0.5845881621323049">ARE</Keyword>
+<Keyword weight="0.505844054348328">YOU</Keyword>
+</Keywords>
+<Messages>
+<Message>I am an artifical talking entity.</Message>
+</Messages>
+</Response>
+<Response>
+<Keywords>
+<Keyword weight="0.6659810044042231">WHAT</Keyword>
+<Keyword weight="0.5635616578871615">AM</Keyword>
+<Keyword weight="0.6156269642948697">I</Keyword>
+</Keywords>
+<Messages>
+<Message>You are a person I presume. </Message>
+</Messages>
+</Response>
 </Responses>
 
